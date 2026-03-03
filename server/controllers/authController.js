@@ -2,8 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
-exports.regiser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -11,38 +10,33 @@ exports.regiser = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-
-const exists = await User.findOne({ email });
+    const exists = await User.findOne({ email });
     if (exists) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-
-    const User = await User.create({
+    const newUser = await User.create({
       username,
       email,
       password: hashedPassword,
     });
 
-
-    res.status(201).json({ message: 'User registered successfully',
-        user: {
-            id: User._id,
-            username: User.username,
-            email: User.email,
-        },
+    return res.status(201).json({
+      message: 'User registered successfully',
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
-
-
-
-exports.login = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -60,10 +54,16 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
 
-    res.json({ message: 'Login successful', token });
+    return res.json({ message: 'Login successful', token });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
+
+module.exports = { registerUser, loginUser };
