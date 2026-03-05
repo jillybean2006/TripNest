@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 
 dotenv.config();
@@ -26,7 +27,15 @@ app.get("/", (req, res) => {
   res.send("TravelMate Backend Running");
 });
 
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: "http://localhost:3000",
+    changeOrigin: true,
+  })
+);
 
 
-const PORT = process.env.PORT || 3001;
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
