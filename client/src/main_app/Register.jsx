@@ -3,10 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../utils/api";
 import "./Register.css";
 
-
 export default function Register() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,12 +18,10 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-
-
     try {
       const res = await registerUser(form);
 
-      if (res.success) {
+      if (res.message === "User registered successfully") {
         alert("Registration Successful");
         navigate("/login");
       } else {
@@ -31,32 +32,23 @@ export default function Register() {
     }
   }
 
-
-
   return (
     <div className="register-page">
-
       <div className="register-card">
-
-        <h2 className="register-title">
-          Create Account
-        </h2>
+        <h2 className="register-title">Create Account</h2>
 
         <form onSubmit={handleSubmit} className="register-form">
-
           <div className="form-group">
             <label>Name</label>
             <input
               type="text"
-              name="name"
+              name="username"
               required
               placeholder="Enter your name"
-              value={form.name}
+              value={form.username}
               onChange={handleChange}
             />
           </div>
-
-
 
           <div className="form-group">
             <label>Email</label>
@@ -82,26 +74,18 @@ export default function Register() {
             />
           </div>
 
-          
-
           <button type="submit" className="register-btn">
             Register
           </button>
-
         </form>
 
         <p className="register-footer">
           Already have an account?
-          <span
-            onClick={() => navigate("/login")}
-            className="login-link"
-          >
+          <span onClick={() => navigate("/login")} className="login-link">
             Login
           </span>
         </p>
-
       </div>
-
     </div>
   );
 }
