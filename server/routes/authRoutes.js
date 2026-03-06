@@ -5,7 +5,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 const blacklist = require('../utils/tokenBlacklist');
 
 router.post('/register', registerUser);
-
 router.post('/login', loginUser);
 
 router.post('/logout', authMiddleware, (req, res) => {

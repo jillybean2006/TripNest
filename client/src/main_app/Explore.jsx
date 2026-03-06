@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Explore() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [Places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState([]);
 
 
   async function handleSearch(e) {
@@ -15,10 +15,11 @@ export default function Explore() {
 
     try {
       const results = await searchPlaces(query);
-      setPlaces(results);
+      setPlaces(results.places || []);
     } catch { setPlaces([]); }
     }
 
+    
     return (
         <div>
             <h1>Explore Destinations</h1>
@@ -33,7 +34,7 @@ export default function Explore() {
             </form>
 
             <div>
-                {Places.map((c, i) => (
+                {places.map((c, i) => (
                     <div key={i}>
                     onClick={() => navigate(`/place/${c.id}`)}
                     <h3>{c.name}</h3>
@@ -41,7 +42,7 @@ export default function Explore() {
                     </div>
                 ))}
 
-              {  Places.length === 0 && query &&(
+              {  places.length === 0 && query &&(
                 <div onClick={() => navigate(`/plan-your-trip/${query}`)}>
                 <h3> Plan a trip to {query} </h3>
                 <p> Use custom destination</p>

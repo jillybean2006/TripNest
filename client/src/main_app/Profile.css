@@ -1,0 +1,5 @@
+/* basic placeholder so build succeeds */
+.page {
+  min-height: 100vh;
+  padding: 24px;
+}
