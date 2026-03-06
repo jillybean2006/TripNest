@@ -12,10 +12,14 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+<<<<<<< HEAD
     const exists = await User.findOne({
       $or: [{ email }, { username }],
     });
 
+=======
+    const exists = await User.findOne({ email });
+>>>>>>> 8c97521e87be103f60ea6431101d3404b0cf7eff
     if (exists) {
       return res.status(400).json({ message: 'User already exists' });
     }
@@ -37,8 +41,12 @@ const registerUser = async (req, res) => {
       },
     });
   } catch (error) {
+<<<<<<< HEAD
     console.error('REGISTER ERROR:', error);
     return res.status(500).json({ message: error.message });
+=======
+    return res.status(500).json({ message: 'Server error' });
+>>>>>>> 8c97521e87be103f60ea6431101d3404b0cf7eff
   }
 };
 
@@ -68,6 +76,7 @@ const loginUser = async (req, res) => {
       { expiresIn: '1h' }
     );
 
+<<<<<<< HEAD
     return res.status(200).json({
       message: 'Login successful',
       token,
@@ -84,3 +93,12 @@ const loginUser = async (req, res) => {
 };
 
 module.exports = { registerUser, loginUser };
+=======
+    return res.json({ message: 'Login successful', token });
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { registerUser, loginUser };
+>>>>>>> 8c97521e87be103f60ea6431101d3404b0cf7eff

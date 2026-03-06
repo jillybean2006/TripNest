@@ -1,4 +1,5 @@
 const express = require("express");
+<<<<<<< HEAD
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -28,3 +29,19 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+=======
+
+console.log("server file started");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Backend works");
+});
+
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+>>>>>>> 8c97521e87be103f60ea6431101d3404b0cf7eff

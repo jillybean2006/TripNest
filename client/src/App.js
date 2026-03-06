@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
 
-function App() {
+import Home from "./main_app/Home.jsx";
+import Explore from "./main_app/Explore.jsx";
+import Hotels from "./main_app/Hotels.jsx";
+
+import Register from "./main_app/Register.jsx";
+import Login from "./main_app/Login.jsx";
+import Profile from "./main_app/Profile.jsx";
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/explore" element={<Explore />} />
+      <Route path="/plan-your-trip/:destination" element={<Hotels />} />
+
+    
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/profile" element={<Profile />} />
+
+    
+      <Route path="*" element={<h2 style={{ padding: 20 }}>Page not found</h2>} />
+    </Routes>
   );
 }
-
-export default App;
