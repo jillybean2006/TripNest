@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser } = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
-const blacklist = require('../utils/blacklist');
+const blacklist = require('../utils/tokenBlacklist');
 
 router.post('/register', registerUser);
 
