@@ -28,6 +28,7 @@ export async function searchPlaces(query) {
   const res = await fetch(
     `${API_BASE}/api/places/search?query=${encodeURIComponent(query)}`
   );
+
   return res.json();
 }
 

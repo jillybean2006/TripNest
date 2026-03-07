@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { searchPlaces, getPlacesToVisit } = require('../controllers/placeController');
+const { searchPlaces, getPlacesToVisit } = require("../controllers/placeController");
 
-router.get('/search/:query', searchPlaces);
-router.get('/visit/:places', getPlacesToVisit);
+router.get("/search", searchPlaces);
+router.get("/visit", getPlacesToVisit);
 
 module.exports = router;

@@ -1,69 +1,66 @@
-const axios = require('axios');
-
+const axios = require("axios");
 
 exports.searchPlaces = async (req, res) => {
   try {
-    const response = await axios.get('https://api.opentripmap.com/0.1/en/places/radius', {
-      params: {
-        q: req.params.query,
-        format: 'json',
-        limit: 10,
-        
-      },
+    const query = req.query.query;
 
-        headers: {
-            "User-Agent": "TripNext"
-        }
-    });
+    if (!query) {
+      return res.status(400).json({ message: "Query is required" });
+    }
 
-    const places = response.data
-    .filter(
-        (item) => 
-            item.type === 'town' ||
-            item.type === 'city' ||
-            item.type === 'nature'
-)         
+    
+    const places = [
+      { name: `${query} City`, country: query },
+      { name: `${query} Beach`, country: query },
+      { name: `${query} Downtown`, country: query }
+    ];
 
-    .map((item) => ({
-        name: item.display_name.split(',')[0],
-        country: item.address.country || '',
-    }));
+    res.json({ places });
 
-    res.json(places);
   } catch (error) {
+    console.error("SEARCH PLACES ERROR:", error);
     res.status(500).json({ places: [] });
   }
 };
 
-
 exports.getPlacesToVisit = async (req, res) => {
 
-    const places = req.params.places;
+  const place = req.query.place;
 
-    try {
-        const WikiResponse = await axios.get(`https://en.wikipedia.org/w/api.php`, {
-           params: {
-            action: 'query',
-            format: 'json',
-            titles: places,
-           },
-        });
+  try {
 
-        res.json({
-            places: WikiResponse.data.title,
-            description: WikiResponse.data.extract,
-            image: WikiResponse.data.thumbnail ? WikiResponse.data.thumbnail.source : null,
-        googleMaps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(places
-        )}`,
-        });
-    } catch (error) {
-        res.json({ 
-            places,
-            description: 'Not available',
-            image: null,
-            googleMaps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(places)}`,
-        });
-    }
-        };
+    const wikiResponse = await axios.get("https://en.wikipedia.org/w/api.php", {
+      params: {
+        action: "query",
+        prop: "extracts|pageimages",
+        exintro: true,
+        explaintext: true,
+        piprop: "thumbnail",
+        pithumbsize: 400,
+        titles: place,
+        format: "json",
+        origin: "*"
+      }
+    });
 
+    const pages = wikiResponse.data.query.pages;
+    const firstPage = Object.values(pages)[0];
 
+    res.json({
+      place,
+      description: firstPage?.extract || "Not available",
+      image: firstPage?.thumbnail?.source || null,
+      googleMaps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+    });
+
+  } catch (error) {
+
+    res.json({
+      place,
+      description: "Not available",
+      image: null,
+      googleMaps: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+    });
+
+  }
+};

@@ -1,110 +1,62 @@
-import React, { useEffect, useState } from "react";
-import { getUser, getTrips } from "../utils/api";
+import React, { useState } from "react";
+import { searchPlaces } from "../utils/api";
 import { useNavigate } from "react-router-dom";
-import "./Profile.css";
 
-
-
-export default function Profile() {
+export default function Places() {
+  const [query, setQuery] = useState("");
+  const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [trips, setTrips] = useState([]);
-  const [loading, setLoading] = useState(true);
+  async function handleSearch(e) {
+    e.preventDefault();
 
+    if (!query.trim()) return;
 
-
-  
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const userData = await getUser();
-        console.log("USER DATA:", userData);
-        setUser(userData);
-
-        const tripsData = await getTrips();
-        console.log("TRIPS DATA:", tripsData);
-        setTrips(tripsData?.trips || []);
-      } catch (err) {
-        console.error("PROFILE ERROR:", err);
-        localStorage.removeItem("token");
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
+    try {
+      const res = await searchPlaces(query);
+      setPlaces(res.places || []);
+    } catch {
+      setPlaces([]);
     }
-
-    loadProfile();
-  }, [navigate]);
-
-  function logout() {
-    localStorage.removeItem("token");
-    navigate("/login");
-
-
-  }
-
-  if (loading) {
-    return <h1 className="profile-loading">Loading Profile...</h1>;
-  }
-
-  if (!user) {
-    return <h1 className="profile-loading">No user data found.</h1>;
   }
 
   return (
-    <div className="profile-page">
-      <div className="profile-card">
-        <div className="profile-avatar">
-          {user?.name ? user.name.substring(0, 2).toUpperCase() : "U"}
-        </div>
+    <div style={{ padding: "30px", textAlign: "center" }}>
+      <h1>Explore Places</h1>
 
-        <h2 className="profile-name">{user?.name || "User"}</h2>
-        <p className="profile-email">{user?.email || "No email found"}</p>
+      <form onSubmit={handleSearch}>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search for a place"
+          style={{ padding: "10px", width: "250px" }}
+        />
 
-        <div className="profile-actions">
-          <button
-            onClick={() => navigate("/plan-trip")}
-            className="btn-blue"
+        <button type="submit" style={{ marginLeft: "10px" }}>
+          Search
+        </button>
+      </form>
+
+      <div style={{ marginTop: "30px" }}>
+        {places.length === 0 && <p>No places found</p>}
+
+        {places.map((p, index) => (
+          <div
+            key={index}
+            style={{
+              border: "1px solid #ccc",
+              padding: "10px",
+              margin: "10px",
+              cursor: "pointer",
+            }}
+            onClick={() =>
+              navigate(`/place-details?place=${encodeURIComponent(p.name)}`)
+            }
           >
-            Plan a Trip
-          </button>
-
-          <button
-            onClick={() => navigate("/explore")}
-            className="btn-dark"
-          >
-            Explore Places
-          </button>
-
-          <button
-            onClick={logout}
-            className="btn-red"
-          >
-            Logout
-          </button>
-        </div>
-
-        <h3 className="profile-trips-title">Your Trips</h3>
-
-        <div className="profile-trips">
-          {trips.length === 0 && <p>No trips planned yet</p>}
-
-          {trips.map((t) => (
-            <div
-              key={t._id}
-              onClick={() => navigate(`/trip/${t._id}`)}
-              className="trip-card"
-            >
-              <p>
-                <b>{t.from}</b> ➝ <b>{t.to}</b>
-              </p>
-              <p className="trip-info">
-                {t.days} days | {t.travelers} people
-              </p>
-            </div>
-          ))}
-        </div>
+            <b>{p.name}</b>
+            <p>{p.country}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
