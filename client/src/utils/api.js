@@ -12,7 +12,6 @@ export async function registerUser(formData) {
   return res.json();
 }
 
-
 export async function loginUser(formData) {
   const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
@@ -25,39 +24,49 @@ export async function loginUser(formData) {
   return res.json();
 }
 
-
 export async function searchPlaces(query) {
-  const res = await fetch(`${API_BASE}/api/places/search?query=${encodeURIComponent(query)}`);
+  const res = await fetch(
+    `${API_BASE}/api/places/search?query=${encodeURIComponent(query)}`
+  );
   return res.json();
 }
 
+export async function getUser() {
+  const token = localStorage.getItem("token");
 
-export async function getUser(token) {
-  const res = await fetch(`${API_BASE}/api/user/profile`, {
+  const res = await fetch(`${API_BASE}/api/auth/profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
+  if (!res.ok) {
+    return null;
+  }
+
   return res.json();
 }
 
+export async function getTrips() {
+  const token = localStorage.getItem("token");
 
-export async function getTrips(token) {
-  const res = await fetch(`${API_BASE}/api/trip`, {
+  const res = await fetch(`${API_BASE}/api/trip/my-trips`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
+  if (!res.ok) {
+    return { trips: [] };
+  }
+
   return res.json();
 }
-
 
 export async function saveTrip(tripData) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_BASE}/api/trip`, {
+  const res = await fetch(`${API_BASE}/api/trip/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

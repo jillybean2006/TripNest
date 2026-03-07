@@ -9,12 +9,11 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   async function handleSubmit(e) {
     e.preventDefault();
 
     try {
-      const res = await loginUser(email, password);
+      const res = await loginUser({ email, password });
 
       if (res.token) {
         localStorage.setItem("token", res.token);
@@ -23,26 +22,17 @@ export default function Login() {
       } else {
         alert(res.message || "Login failed");
       }
-
     } catch (error) {
       alert("Login failed");
     }
   }
 
-
-
   return (
     <div className="login-page">
-
       <div className="login-card">
-
-        <h2 className="login-title">
-          Login
-        </h2>
-
+        <h2 className="login-title">Login</h2>
 
         <form onSubmit={handleSubmit} className="login-form">
-
           <div className="form-group">
             <label>Email</label>
             <input
@@ -53,8 +43,6 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-
-
 
           <div className="form-group">
             <label>Password</label>
@@ -70,9 +58,6 @@ export default function Login() {
           <button type="submit" className="login-btn">
             Login
           </button>
-
-          
-
         </form>
 
         <p className="login-footer">
@@ -84,9 +69,7 @@ export default function Login() {
             Register
           </span>
         </p>
-
       </div>
-
     </div>
   );
 }

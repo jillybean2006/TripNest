@@ -3,25 +3,29 @@ import { getUser, getTrips } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
+
+
 export default function Profile() {
   const navigate = useNavigate();
 
-
-
   const [user, setUser] = useState(null);
-   const [trips, setTrips] = useState([]);
+  const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
 
   useEffect(() => {
     async function loadProfile() {
       try {
         const userData = await getUser();
+        console.log("USER DATA:", userData);
         setUser(userData);
 
         const tripsData = await getTrips();
-        setTrips(tripsData.trips || []);
+        console.log("TRIPS DATA:", tripsData);
+        setTrips(tripsData?.trips || []);
       } catch (err) {
-        console.error(err);
+        console.error("PROFILE LOAD ERROR:", err);
         localStorage.removeItem("token");
         navigate("/login");
       } finally {
@@ -39,33 +43,23 @@ export default function Profile() {
     navigate("/login");
   }
 
-
-
   if (loading) {
-    return (
-      <h1 className="profile-loading">
-        Loading Profile...
-      </h1>
-    );
+    return <h1 className="profile-loading">Loading Profile...</h1>;
   }
 
-
+  if (!user) {
+    return <h1 className="profile-loading">No user data found.</h1>;
+  }
 
   return (
     <div className="profile-page">
-
       <div className="profile-card">
-
-        
         <div className="profile-avatar">
           {user?.name ? user.name.substring(0, 2).toUpperCase() : "U"}
         </div>
 
-        <h2 className="profile-name">{user.name}</h2>
-        <p className="profile-email">{user.email}</p>
-
-    
-
+        <h2 className="profile-name">{user?.name || "User"}</h2>
+        <p className="profile-email">{user?.email || "No email found"}</p>
 
         <div className="profile-actions">
           <button
@@ -82,8 +76,6 @@ export default function Profile() {
             Explore Places
           </button>
 
-
-
           <button
             onClick={logout}
             className="btn-red"
@@ -92,9 +84,6 @@ export default function Profile() {
           </button>
         </div>
 
-
-
-        
         <h3 className="profile-trips-title">Your Trips</h3>
 
         <div className="profile-trips">
@@ -115,9 +104,7 @@ export default function Profile() {
             </div>
           ))}
         </div>
-
       </div>
-
     </div>
   );
 }
