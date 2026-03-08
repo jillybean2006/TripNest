@@ -380,7 +380,7 @@ img {
   color: gainsboro;
 }
 
-/
+
 @media (max-width: 800px) {
   .site-nav {
     flex-direction: column;
