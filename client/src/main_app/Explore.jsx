@@ -1,12 +1,11 @@
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {searchPlaces} from "../utils/api";
-import { useState } from "react";
+import { searchPlaces } from "../utils/api";
 
 export default function Explore() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [places, setPlaces] = useState([]);
-
 
   async function handleSearch(e) {
     e.preventDefault();
@@ -16,39 +15,66 @@ export default function Explore() {
     try {
       const results = await searchPlaces(query);
       setPlaces(results.places || []);
-    } catch { setPlaces([]); }
+    } catch (error) {
+      console.error("SEARCH ERROR:", error);
+      setPlaces([]);
     }
+  }
 
-    
-    return (
-        <div>
-            <h1>Explore Destinations</h1>
-            <form onSubmit={handleSearch}>
-                <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search destinations..."
-                />  
+  return (
+    <div style={{ padding: "30px" }}>
+      <h1>Explore Destinations</h1>
 
-                <button type="submit">Search</button>
-            </form>
+      <form onSubmit={handleSearch} style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search destinations..."
+          style={{
+            padding: "10px",
+            width: "250px",
+            marginRight: "10px",
+          }}
+        />
+        <button type="submit">Search</button>
+      </form>
 
-            <div>
-                {places.map((c, i) => (
-                    <div key={i}>
-                    onClick={() => navigate(`/place/${c.id}`)}
-                    <h3>{c.name}</h3>
-                    <p>{c.description}</p>
-                    </div>
-                ))}
+      <div>
+        {places.map((place, i) => (
+          <div
+            key={place.id || i}
+            onClick={() => navigate(`/places/${place.name}`)}
+            style={{
+              border: "1px solid #ccc",
+              padding: "15px",
+              marginBottom: "12px",
+              borderRadius: "10px",
+              cursor: "pointer",
+              backgroundColor: "#fff",
+            }}
+          >
+            <h3 style={{ margin: "0 0 8px 0" }}>{place.name}</h3>
+            <p style={{ margin: 0 }}>{place.description}</p>
+          </div>
+        ))}
 
-              {  places.length === 0 && query &&(
-                <div onClick={() => navigate(`/plan-your-trip/${query}`)}>
-                <h3> Plan a trip to {query} </h3>
-                <p> Use custom destination</p>
-                </div>
-                )}
-            </div>
-        </div>
-    );
+        {places.length === 0 && query && (
+          <div
+            onClick={() => navigate(`/plan-your-trip/${query}`)}
+            style={{
+              border: "1px solid #ccc",
+              padding: "15px",
+              borderRadius: "10px",
+              cursor: "pointer",
+              backgroundColor: "#fff",
+            }}
+          >
+            <h3 style={{ margin: "0 0 8px 0" }}>Plan a trip to {query}</h3>
+            <p style={{ margin: 0 }}>Use custom destination</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

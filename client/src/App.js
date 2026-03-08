@@ -9,52 +9,44 @@ import Profile from "./main_app/Profile.jsx";
 import TripPlanner from "./main_app/TripPlanner.jsx";
 import TripDetails from "./main_app/TripDetails.jsx";
 import Places from "./main_app/Places.jsx";
-
-
-
-function Restaurants() {
-  return <h2 style={{ padding: 20 }}>Restaurants page coming soon</h2>;
-}
-
-function Transport() {
-  return <h2 style={{ padding: 20 }}>Transport options coming soon</h2>;
-}
-
-function EditTrip() {
-  return <h2 style={{ padding: 20 }}>Edit Trip page coming soon</h2>;
-}
+import Restaurants from "./main_app/Restaurants.jsx";
+import Transport from "./main_app/Transport.jsx";
+import EditTrip from "./main_app/EditTrip.jsx";
 
 export default function App() {
   return (
     <Routes>
-      {/* Main pages */}
+
+      
       <Route path="/" element={<Home />} />
       <Route path="/explore" element={<Explore />} />
+      <Route path="/profile" element={<Profile />} />
 
-      {/* Auth */}
+      
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
 
       
-      <Route path="/profile" element={<Profile />} />
-
-      
       <Route path="/plan-trip" element={<TripPlanner />} />
-
-      
       <Route path="/trip/:id" element={<TripDetails />} />
 
+      
+      <Route path="/places/:places" element={<Places />} />
+      <Route path="/restaurants/:places" element={<Restaurants />} />
+      <Route path="/hotels/:places" element={<Hotels />} />
+
      
-      <Route path="/places/:destination" element={<Places />} />
-      <Route path="/restaurants/:destination" element={<Restaurants />} />
-      <Route path="/hotels/:destination" element={<Hotels />} />
       <Route path="/transport" element={<Transport />} />
 
-      
+     
       <Route path="/edit-trip/:id" element={<EditTrip />} />
 
       
-      <Route path="*" element={<h2 style={{ padding: 20 }}>Page not found</h2>} />
+      <Route
+        path="*"
+        element={<h2 style={{ padding: "20px" }}>Page not found</h2>}
+      />
+
     </Routes>
   );
 }

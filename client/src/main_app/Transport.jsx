@@ -1,6 +1,5 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import "./Transport.css";
 
 export default function Transport() {
   const [searchParams] = useSearchParams();
@@ -14,6 +13,7 @@ export default function Transport() {
     );
   }
 
+  const encodedDestination = encodeURIComponent(to);
 
   return (
     <div className="transport-page">
@@ -26,8 +26,9 @@ export default function Transport() {
 
         <div className="transport-links">
 
+          
           <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${to}`}
+            href={`https://www.google.com/maps/dir/?api=1&destination=${encodedDestination}`}
             target="_blank"
             rel="noreferrer"
             className="transport-btn blue-btn"
@@ -35,19 +36,18 @@ export default function Transport() {
             View Routes on Google Maps
           </a>
 
-
           <a
-            href={`https://www.irctc.co.in/nget/train-search`}
+            href={`https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=${encodedDestination}`}
             target="_blank"
             rel="noreferrer"
-            className="transport-btn green-btn"
+            className="transport-btn black-btn"
           >
-            Search Trains
+            Book an Uber
           </a>
-          
 
+          
           <a
-            href={`https://www.google.com/flights`}
+            href="https://www.google.com/flights"
             target="_blank"
             rel="noreferrer"
             className="transport-btn purple-btn"
@@ -56,7 +56,6 @@ export default function Transport() {
           </a>
 
         </div>
-
 
       </div>
 

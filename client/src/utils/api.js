@@ -1,6 +1,7 @@
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 
+
 export async function registerUser(formData) {
   const res = await fetch(`${API_BASE}/api/auth/register`, {
     method: "POST",
@@ -13,6 +14,8 @@ export async function registerUser(formData) {
   return res.json();
 }
 
+
+
 export async function loginUser(formData) {
   const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
@@ -24,6 +27,8 @@ export async function loginUser(formData) {
 
   return res.json();
 }
+
+
 
 export async function getUser() {
   const token = localStorage.getItem("token");
@@ -67,6 +72,7 @@ export async function getTrips() {
   return res.json();
 }
 
+
 export async function getTripById(id) {
   const token = localStorage.getItem("token");
 
@@ -80,6 +86,8 @@ export async function getTripById(id) {
 
   return res.json();
 }
+
+
 
 export async function saveTrip(tripData) {
   const token = localStorage.getItem("token");
@@ -96,6 +104,8 @@ export async function saveTrip(tripData) {
   return res.json();
 }
 
+
+
 export async function deleteTrip(id) {
   const token = localStorage.getItem("token");
 
@@ -104,6 +114,23 @@ export async function deleteTrip(id) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+  });
+
+  return res.json();
+}
+
+
+
+export async function updateTrip(id, tripData) {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`${API_BASE}/api/trip/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(tripData),
   });
 
   return res.json();
