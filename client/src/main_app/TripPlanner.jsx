@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
 import { saveTrip } from "../utils/api";
-import "./TripPlanner.css";
+
 
 export default function TripPlanner() {
   const location = useLocation();
@@ -34,29 +34,35 @@ export default function TripPlanner() {
     setTrip({ ...trip, [e.target.name]: e.target.value });
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+ async function handleSubmit(e) {
+  e.preventDefault();
 
-    if (!trip.from || !trip.to) {
-      alert("From and To fields are required");
-      return;
-    }
-
-    const res = await saveTrip(trip);
-
-    if (res.message === "Trip Saved Successfully") {
-      alert("Trip Saved Successfully 🎉");
-      setTrip({
-        from: "",
-        to: "",
-        days: "",
-        travelers: ""
-      });
-    } else {
-      alert("Failed to save trip");
-    }
+  if (!trip.from || !trip.to || !trip.days || !trip.travelers) {
+    alert("All fields are required");
+    return;
   }
 
+  try {
+    const res = await saveTrip({
+      from: trip.from,
+      to: trip.to,
+      days: Number(trip.days),
+      travelers: Number(trip.travelers),
+    });
+
+    console.log("SAVE TRIP RESPONSE:", res);
+
+    if (res.message === "Trip created successfully") {
+      alert("Trip saved successfully!");
+      navigate("/profile");
+    } else {
+      alert(res.message || "Trip failed to save");
+    }
+  } catch (error) {
+    console.error("TRIP SUBMIT ERROR:", error);
+    alert("Trip failed to save");
+  }
+}
 
 
   return (
@@ -94,7 +100,7 @@ export default function TripPlanner() {
           />
 
           <input
-          
+
             name="travelers"
             placeholder="Number of Travelers"
             value={trip.travelers}
