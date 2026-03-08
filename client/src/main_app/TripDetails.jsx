@@ -1,88 +1,85 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getTripById, deleteTrip } from "../utils/api";
-
 
 export default function TripDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadTrip() {
       try {
-        const data = await getTripById(id);
-        setTrip(data?.trip || data);
+        const res = await getTripById(id);
+        setTrip(res.trip || res);
       } catch (err) {
-        console.error("LOAD TRIP ERROR:", err);
-        alert("Failed to load trip");
-        navigate("/profile");
+        console.error("Failed to load trip:", err);
       } finally {
         setLoading(false);
       }
     }
 
     loadTrip();
-  }, [id, navigate]);
+  }, [id]);
 
   async function handleDelete() {
-    const confirmDelete = window.confirm("Are you sure you want to delete this trip?");
-    if (!confirmDelete) return;
+    const confirmed = window.confirm("Are you sure you want to delete this trip?");
+    if (!confirmed) return;
 
     try {
-      const res = await deleteTrip(id);
-
-      if (res.message === "Trip deleted successfully") {
-        alert("Trip deleted successfully");
-        navigate("/profile");
-      } else {
-        alert(res.message || "Delete failed");
-      }
-    } catch (error) {
-      console.error("DELETE TRIP ERROR:", error);
-      alert("Delete failed");
+      await deleteTrip(id);
+      navigate("/profile");
+    } catch (err) {
+      alert("Failed to delete trip");
     }
   }
 
   if (loading) {
-    return <h2>Loading trip...</h2>;
+    return <h2 className="section-title">Loading trip...</h2>;
   }
 
   if (!trip) {
-    return <h2>Trip not found</h2>;
+    return <h2 className="section-title">Trip not found</h2>;
   }
 
   return (
-    <div className="trip-details-page">
-      <h2>{trip.from} → {trip.to}</h2>
-      <p>{trip.days} days • {trip.travelers} people</p>
+    <section>
+      <h1 className="section-title">Trip Details</h1>
 
-      <div className="trip-actions">
-        <button onClick={() => navigate(`/edit-trip/${trip._id}`)}>
-          Edit Trip
-        </button>
+      <div className="two-panel-grid">
+        <div className="panel-card">
+          <h2>{trip.from} → {trip.to}</h2>
+          <p>Days: {trip.days}</p>
+          <p>Travelers: {trip.travelers}</p>
+        </div>
 
-        <button onClick={handleDelete}>
-          Delete Trip
-        </button>
+        <div className="panel-card">
+          <div className="hero-actions">
+            <button
+              className="retro-btn plum"
+              onClick={() => navigate(`/edit-trip/${trip._id}`)}
+            >
+              Edit Trip
+            </button>
 
-        <button onClick={() => navigate(`/places/${trip.to}`)}>
-          Places to Visit
-        </button>
+            <button
+              className="retro-btn teal"
+              onClick={() => navigate(`/transport?to=${encodeURIComponent(trip.to)}`)}
+            >
+              Transport
+            </button>
 
-        <button onClick={() => navigate(`/restaurants/${trip.to}`)}>
-          Restaurants
-        </button>
-
-        <button onClick={() => navigate(`/hotels/${trip.to}`)}>
-          Hotels
-        </button>
-
-        <button onClick={() => navigate(`/transport?from=${trip.from}&to=${trip.to}`)}>
-          Transport Options
-        </button>
+            <button
+              className="retro-btn crimson"
+              onClick={handleDelete}
+            >
+              Delete Trip
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

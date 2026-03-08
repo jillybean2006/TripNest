@@ -1,5 +1,53 @@
-/* basic placeholder so build succeeds */
-.page {
-  min-height: 100vh;
-  padding: 24px;
+.profile-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-title {
+  text-align: center;
+  color: gold;
+  font-size: 2.2rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+.profile-panel,
+.trip-panel {
+  background: rgb(20, 20, 30);
+  border: 2px solid plum;
+  border-radius: 24px;
+  padding: 1.5rem;
+}
+
+.profile-panel h2,
+.trip-panel h2 {
+  color: gold;
+  margin-bottom: 1rem;
+}
+
+.trip-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.trip-item {
+  border: 1px solid thistle;
+  border-radius: 14px;
+  padding: 1rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
 }

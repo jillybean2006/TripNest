@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { getTripById, updateTrip } from "../utils/api";
 
 export default function EditTrip() {
-
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -11,15 +10,27 @@ export default function EditTrip() {
     from: "",
     to: "",
     days: "",
-    travelers: ""
+    travelers: "",
   });
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadTrip() {
-      const data = await getTripById(id);
+      try {
+        const res = await getTripById(id);
+        const foundTrip = res.trip || res;
 
-      if (data.trip) {
-        setTrip(data.trip);
+        setTrip({
+          from: foundTrip.from || "",
+          to: foundTrip.to || "",
+          days: foundTrip.days || "",
+          travelers: foundTrip.travelers || "",
+        });
+      } catch (err) {
+        console.error("Failed to load trip:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -27,70 +38,69 @@ export default function EditTrip() {
   }, [id]);
 
   function handleChange(e) {
-    setTrip({
-      ...trip,
-      [e.target.name]: e.target.value
-    });
+    setTrip({ ...trip, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const res = await updateTrip(id, trip);
-
-    if (res.message === "Trip updated successfully") {
-      alert("Trip updated!");
+    try {
+      await updateTrip(id, trip);
       navigate(`/trip/${id}`);
-    } else {
-      alert("Update failed");
+    } catch (err) {
+      alert("Failed to update trip");
     }
   }
 
+  if (loading) {
+    return <h2 className="section-title">Loading trip...</h2>;
+  }
+
   return (
-    <div style={{ padding: "40px", maxWidth: "500px", margin: "auto" }}>
+    <section>
+      <h1 className="section-title">Edit Trip</h1>
 
-      <h2>Edit Trip</h2>
+      <div className="form-section">
+        <div className="form-card">
+          <form className="form-stack" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="from"
+              placeholder="From"
+              value={trip.from}
+              onChange={handleChange}
+            />
 
-      <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="to"
+              placeholder="To"
+              value={trip.to}
+              onChange={handleChange}
+            />
 
-        <label>From</label>
-        <input
-          type="text"
-          name="from"
-          value={trip.from}
-          onChange={handleChange}
-          required
-        />
+            <input
+              type="text"
+              name="days"
+              placeholder="Days"
+              value={trip.days}
+              onChange={handleChange}
+            />
 
-        <label>To</label>
-        <input
-          type="text"
-          name="to"
-          value={trip.to}
-          onChange={handleChange}
-          required
-        />
+            <input
+              type="text"
+              name="travelers"
+              placeholder="Travelers"
+              value={trip.travelers}
+              onChange={handleChange}
+            />
 
-        <label>Days</label>
-        <input
-          type="number"
-          name="days"
-          value={trip.days}
-          onChange={handleChange}
-        />
-
-        <label>Travelers</label>
-        <input
-          type="number"
-          name="travelers"
-          value={trip.travelers}
-          onChange={handleChange}
-        />
-
-        <button type="submit">Save Changes</button>
-
-      </form>
-
-    </div>
+            <button type="submit" className="retro-btn gold">
+              Update Trip
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 }

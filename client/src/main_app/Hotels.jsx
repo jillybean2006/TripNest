@@ -2,62 +2,41 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 export default function Hotels() {
-  const { destination } = useParams();
+  const { places } = useParams();
 
   return (
-    <div className="hotels-page">
+    <section>
+      <h1 className="section-title">Hotels in {places}</h1>
+      <p className="section-text">Choose a hotel booking option below.</p>
 
-
-      <h1 className="hotels-title">
-        Hotels & Stay in {destination}
-      </h1>
-
-      <div className="hotels-links">
-
-    
+      <div className="results-grid">
         <a
           href="https://www.booking.com"
           target="_blank"
-          rel="noopener noreferrer"
-          className="hotel-card"
+          rel="noreferrer"
+          className="result-card"
         >
-           Book Hotels on Booking.com
+          Booking.com
         </a>
-
-    
 
         <a
-          href="https://www.makemytrip.com"
+          href="https://www.expedia.com"
           target="_blank"
-          rel="noopener noreferrer"
-          className="hotel-card"
+          rel="noreferrer"
+          className="result-card"
         >
-           Find Stays on MakeMyTrip
+          Expedia
         </a>
-
-        
 
         <a
-          href="https://www.oyorooms.com"
+          href="https://www.hotels.com"
           target="_blank"
-          rel="noopener noreferrer"
-          className="hotel-card"
+          rel="noreferrer"
+          className="result-card"
         >
-           Budget Hotels on OYO
+          Hotels.com
         </a>
-
-    
-
-        <a
-          href="https://www.airbnb.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hotel-card"
-        >
-            Home Stays on Airbnb
-        </a>
-
       </div>
-    </div>
+    </section>
   );
 }

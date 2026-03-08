@@ -17,59 +17,40 @@ export default function Login() {
 
       if (res.token) {
         localStorage.setItem("token", res.token);
-        alert("Login Successful");
         navigate("/profile");
       } else {
         alert(res.message || "Login failed");
       }
-    } catch (error) {
-      alert("Login failed");
+    } catch (err) {
+      alert("Something went wrong while logging in");
     }
   }
 
   return (
-    <div className="login-page">
+    <section className="login-page">
       <div className="login-card">
-        <h2 className="login-title">Login</h2>
+        <h1 className="login-title">Login</h1>
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              required
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              required
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-          <button type="submit" className="login-btn">
+          <button type="submit" className="retro-btn gold">
             Login
           </button>
         </form>
-
-        <p className="login-footer">
-          Don't have an account?
-          <span
-            onClick={() => navigate("/register")}
-            className="register-link"
-          >
-            Register
-          </span>
-        </p>
       </div>
-    </div>
+    </section>
   );
 }

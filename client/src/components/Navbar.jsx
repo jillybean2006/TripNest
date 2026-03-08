@@ -11,56 +11,53 @@ export default function Navbar() {
     navigate("/login");
   }
 
-  const linkClass = (path) =>
-    location.pathname === path ? "active-link" : "nav-link";
+  function linkClass(path) {
+    return location.pathname === path
+      ? "site-link active-link"
+      : "site-link";
+  }
 
   return (
-    <nav className="navbar">
+    <header className="site-header">
+      <nav className="site-nav">
+        <div className="site-logo" onClick={() => navigate("/")}>
+          TripNest
+        </div>
 
-      
-      <h1
-        className="logo"
-        onClick={() => navigate("/")}
-      >
-        TravelMate
-      </h1>
+        <div className="site-links">
+          <Link to="/" className={linkClass("/")}>
+            Home
+          </Link>
 
-      <div className="nav-links">
+          <Link to="/explore" className={linkClass("/explore")}>
+            Explore
+          </Link>
 
-        <Link to="/" className={linkClass("/")}>
-          Home
-        </Link>
+          {!token && (
+            <>
+              <Link to="/login" className={linkClass("/login")}>
+                Login
+              </Link>
 
-        <Link to="/explore" className={linkClass("/explore")}>
-          Explore
-        </Link>
+              <Link to="/register" className={linkClass("/register")}>
+                Register
+              </Link>
+            </>
+          )}
 
-        {!token && (
-          <>
-            <Link to="/login" className={linkClass("/login")}>
-              Login
-            </Link>
-            <Link to="/register" className={linkClass("/register")}>
-              Register
-            </Link>
-          </>
-        )}
+          {token && (
+            <>
+              <Link to="/profile" className={linkClass("/profile")}>
+                Profile
+              </Link>
 
-        {token && (
-          <>
-            <Link to="/profile" className={linkClass("/profile")}>
-              Profile
-            </Link>
-
-            <button
-              onClick={handleLogout}
-              className="logout-btn"
-            >
-              Logout
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
+              <button onClick={handleLogout} className="retro-btn crimson">
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
+    </header>
   );
 }

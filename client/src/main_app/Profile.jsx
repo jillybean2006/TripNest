@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getUser, getTrips } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { getUser, getTrips } from "../utils/api";
 import "./Profile.css";
-
-
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -12,99 +10,101 @@ export default function Profile() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
     async function loadProfile() {
       try {
-        const userData = await getUser();
-        console.log("USER DATA:", userData);
-        setUser(userData);
+        const userRes = await getUser();
+        const tripsRes = await getTrips();
 
-        const tripsData = await getTrips();
-        console.log("TRIPS DATA:", tripsData);
-        setTrips(tripsData?.trips || []);
+        setUser(userRes.user || userRes);
+        setTrips(tripsRes.trips || tripsRes || []);
       } catch (err) {
-        console.error("PROFILE LOAD ERROR:", err);
-        localStorage.removeItem("token");
-        navigate("/login");
+        console.error("Failed to load profile:", err);
       } finally {
         setLoading(false);
       }
     }
 
-
-
     loadProfile();
-  }, [navigate]);
+  }, []);
 
-  function logout() {
+  function handleLogout() {
     localStorage.removeItem("token");
     navigate("/login");
   }
 
   if (loading) {
-    return <h1 className="profile-loading">Loading Profile...</h1>;
-  }
-
-  if (!user) {
-    return <h1 className="profile-loading">No user data found.</h1>;
+    return <h2 className="section-title">Loading profile...</h2>;
   }
 
   return (
-    <div className="profile-page">
-      <div className="profile-card">
-        <div className="profile-avatar">
-          {user?.name ? user.name.substring(0, 2).toUpperCase() : "U"}
-        </div>
+    <section className="profile-page">
+      <h1 className="profile-title">My Profile</h1>
 
-        <h2 className="profile-name">{user?.name || "User"}</h2>
-        <p className="profile-email">{user?.email || "No email found"}</p>
+      <div className="profile-grid">
+        <div className="profile-panel">
+          <h2>User Info</h2>
+          <p>Name: {user?.name || "User"}</p>
+          <p>Email: {user?.email || "No email found"}</p>
 
-        <div className="profile-actions">
-          <button
-            onClick={() => navigate("/plan-trip")}
-            className="btn-blue"
-          >
-            Plan a Trip
-          </button>
-
-          <button
-            onClick={() => navigate("/explore")}
-            className="btn-dark"
-          >
-            Explore Places
-          </button>
-
-          <button
-            onClick={logout}
-            className="btn-red"
-          >
-            Logout
-          </button>
-        </div>
-
-        <h3 className="profile-trips-title">Your Trips</h3>
-
-        <div className="profile-trips">
-          {trips.length === 0 && <p>No trips planned yet</p>}
-
-          {trips.map((t) => (
-            <div
-              key={t._id}
-              onClick={() => navigate(`/trip/${t._id}`)}
-              className="trip-card"
+          <div className="hero-actions">
+            <button
+              className="retro-btn gold"
+              onClick={() => navigate("/plan-trip")}
             >
-              <p>
-                <b>{t.from}</b> ➝ <b>{t.to}</b>
-              </p>
-              <p className="trip-info">
-                {t.days} days | {t.travelers} people
-              </p>
+              Plan a Trip
+            </button>
+
+            <button
+              className="retro-btn plum"
+              onClick={() => navigate("/explore")}
+            >
+              Explore
+            </button>
+
+            <button
+              className="retro-btn crimson"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        <div className="trip-panel">
+          <h2>My Trips</h2>
+
+          {trips.length === 0 ? (
+            <p>No trips yet.</p>
+          ) : (
+            <div className="trip-list">
+              {trips.map((trip) => (
+                <div key={trip._id} className="trip-item">
+                  <div>
+                    <strong>{trip.from}</strong> → <strong>{trip.to}</strong>
+                  </div>
+
+                  <div className="hero-actions">
+                    <button
+                      className="retro-btn teal"
+                      onClick={() => navigate(`/trip/${trip._id}`)}
+                    >
+                      View
+                    </button>
+
+                    <button
+                      className="retro-btn plum"
+                      onClick={() => navigate(`/edit-trip/${trip._id}`)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

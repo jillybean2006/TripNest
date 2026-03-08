@@ -1,56 +1,64 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-  export default function Home() {
-
+export default function Home() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-
   return (
-    <div>
+    <section className="home-page">
+      <div className="hero">
+        <div className="hero-card">
+          <h1 className="hero-title">Welcome to TripNest</h1>
+          <p className="hero-text">
+            Plan your next adventure with us!
+          </p>
 
-      <h1>Welcome to TripNest!</h1>
-      <p>
-        Your personalized travel experience starts here. Plan trips,
-        book hotels, and transport.
-      </p>
+          <div className="hero-actions">
+            {!token ? (
+              <>
+                <button
+                  className="retro-btn gold"
+                  onClick={() => navigate("/register")}
+                >
+                  Get Started
+                </button>
 
-      <div>
-        <button
-           onClick={() =>
-            token ? navigate("/profile") : navigate("/register")
-          }
-        >
-          {token ? "Go to Profile" : "Get Started"}
-        </button>
-
-
-
-        <button onClick={() => navigate("/explore")}>
-          Explore Destinations
-        </button>
+                <button
+                  className="retro-btn plum"
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </button>
+              </>
+            ) : (
+              <button
+                className="retro-btn gold"
+                onClick={() => navigate("/explore")}
+              >
+                Explore Trips
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
+      <section className="feature-grid">
+        <article className="feature-card">
+          <h3>Explore</h3>
+          <p>Search destinations and discover new places.</p>
+        </article>
 
-      <div>
-        <h3>Destinations and Food</h3>
-        <p>Discover amazing places around the world.</p>
-      </div>
+        <article className="feature-card">
+          <h3>Plan</h3>
+          <p>Build trips with transport, hotels, and activities.</p>
+        </article>
 
-
-
-      <div>
-        <h3>Transportation</h3>
-        <p>Cabs, buses, uber, trains and flights.</p>
-      </div>
-
-
-
-      <div>
-        <h3>Hotels and Stay Options</h3>
-        <p>Book hotels, hostels, Airbnbs and more.</p>
-      </div>
-
-    </div>
+        <article className="feature-card">
+          <h3>Track</h3>
+          <p>Keep your travel plans organized in one place.</p>
+        </article>
+      </section>
+    </section>
   );
 }

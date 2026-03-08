@@ -1,5 +1,35 @@
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+function getToken() {
+  return localStorage.getItem("token");
+}
+
+function getAuthHeaders() {
+  const token = getToken();
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+async function handleResponse(res) {
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return {
+      success: false,
+      message: data.message || "Something went wrong",
+      ...data,
+    };
+  }
+
+  return {
+    success: true,
+    ...data,
+  };
+}
+
 
 
 export async function registerUser(formData) {
@@ -11,10 +41,8 @@ export async function registerUser(formData) {
     body: JSON.stringify(formData),
   });
 
-  return res.json();
+  return handleResponse(res);
 }
-
-
 
 export async function loginUser(formData) {
   const res = await fetch(`${API_BASE}/api/auth/login`, {
@@ -25,23 +53,28 @@ export async function loginUser(formData) {
     body: JSON.stringify(formData),
   });
 
-  return res.json();
+  return handleResponse(res);
 }
 
-
-
 export async function getUser() {
-  const token = localStorage.getItem("token");
+  const token = getToken();
+
+  if (!token) {
+    return {
+      success: false,
+      message: "No token found",
+      user: null,
+    };
+  }
 
   const res = await fetch(`${API_BASE}/api/auth/profile`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (!res.ok) return null;
-
-  return res.json();
+  return handleResponse(res);
 }
 
 
@@ -51,63 +84,118 @@ export async function searchPlaces(query) {
     `${API_BASE}/api/places/search?query=${encodeURIComponent(query)}`
   );
 
-  if (!res.ok) return { places: [] };
+  const data = await handleResponse(res);
 
-  return res.json();
+  if (!data.success) {
+    return {
+      success: false,
+      places: [],
+      message: data.message || "Failed to search places",
+    };
+  }
+
+  return {
+    success: true,
+    places: data.places || [],
+  };
 }
 
 
 
 export async function getTrips() {
-  const token = localStorage.getItem("token");
+  const token = getToken();
+
+  if (!token) {
+    return {
+      success: false,
+      trips: [],
+      message: "No token found",
+    };
+  }
 
   const res = await fetch(`${API_BASE}/api/trip/my-trips`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (!res.ok) return { trips: [] };
+  const data = await handleResponse(res);
 
-  return res.json();
+  return {
+    ...data,
+    trips: data.trips || [],
+  };
 }
-
 
 export async function getTripById(id) {
-  const token = localStorage.getItem("token");
+  const token = getToken();
+
+  if (!token) {
+    return {
+      success: false,
+      trip: null,
+      message: "No token found",
+    };
+  }
 
   const res = await fetch(`${API_BASE}/api/trip/${id}`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  if (!res.ok) return null;
-
-  return res.json();
+  return handleResponse(res);
 }
 
-
-
 export async function saveTrip(tripData) {
-  const token = localStorage.getItem("token");
+  const token = getToken();
+
+  if (!token) {
+    return {
+      success: false,
+      message: "No token found",
+    };
+  }
 
   const res = await fetch(`${API_BASE}/api/trip/create`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(tripData),
   });
 
-  return res.json();
+  return handleResponse(res);
 }
 
+export async function updateTrip(id, tripData) {
+  const token = getToken();
 
+  if (!token) {
+    return {
+      success: false,
+      message: "No token found",
+    };
+  }
+
+  const res = await fetch(`${API_BASE}/api/trip/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(tripData),
+  });
+
+  return handleResponse(res);
+}
 
 export async function deleteTrip(id) {
-  const token = localStorage.getItem("token");
+  const token = getToken();
+
+  if (!token) {
+    return {
+      success: false,
+      message: "No token found",
+    };
+  }
 
   const res = await fetch(`${API_BASE}/api/trip/${id}`, {
     method: "DELETE",
@@ -116,22 +204,5 @@ export async function deleteTrip(id) {
     },
   });
 
-  return res.json();
-}
-
-
-
-export async function updateTrip(id, tripData) {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch(`${API_BASE}/api/trip/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(tripData),
-  });
-
-  return res.json();
+  return handleResponse(res);
 }

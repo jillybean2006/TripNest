@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar.jsx";
 
 import Home from "./main_app/Home.jsx";
 import Explore from "./main_app/Explore.jsx";
@@ -15,38 +16,42 @@ import EditTrip from "./main_app/EditTrip.jsx";
 
 export default function App() {
   return (
-    <Routes>
+    <div className="app-shell">
+      <Navbar />
 
-      
-      <Route path="/" element={<Home />} />
-      <Route path="/explore" element={<Explore />} />
-      <Route path="/profile" element={<Profile />} />
+      <main className="page">
+        <div className="page-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/profile" element={<Profile />} />
 
-      
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
 
-      
-      <Route path="/plan-trip" element={<TripPlanner />} />
-      <Route path="/trip/:id" element={<TripDetails />} />
+            <Route path="/plan-trip" element={<TripPlanner />} />
+            <Route path="/trip/:id" element={<TripDetails />} />
+            <Route path="/edit-trip/:id" element={<EditTrip />} />
 
-      
-      <Route path="/places/:places" element={<Places />} />
-      <Route path="/restaurants/:places" element={<Restaurants />} />
-      <Route path="/hotels/:places" element={<Hotels />} />
+            <Route path="/places/:places" element={<Places />} />
+            <Route path="/restaurants/:places" element={<Restaurants />} />
+            <Route path="/hotels/:places" element={<Hotels />} />
+            <Route path="/transport" element={<Transport />} />
 
-     
-      <Route path="/transport" element={<Transport />} />
-
-     
-      <Route path="/edit-trip/:id" element={<EditTrip />} />
-
-      
-      <Route
-        path="*"
-        element={<h2 style={{ padding: "20px" }}>Page not found</h2>}
-      />
-
-    </Routes>
+            <Route
+              path="*"
+              element={
+                <section className="not-found-page">
+                  <h2 className="section-title">Page not found</h2>
+                  <p className="section-text">
+                    The page you are looking for does not exist.
+                  </p>
+                </section>
+              }
+            />
+          </Routes>
+        </div>
+      </main>
+    </div>
   );
 }

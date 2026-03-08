@@ -6,59 +6,42 @@ export default function Transport() {
   const to = searchParams.get("to");
 
   if (!to) {
-    return (
-      <h2 className="transport-error">
-        Destination not provided
-      </h2>
-    );
+    return <h2 className="section-title">Destination not provided</h2>;
   }
 
-  const encodedDestination = encodeURIComponent(to);
-
   return (
-    <div className="transport-page">
+    <section>
+      <h1 className="section-title">Transport Options to {to}</h1>
+      <p className="section-text">Choose how you want to travel.</p>
 
-      <div className="transport-card">
+      <div className="results-grid">
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${to}`}
+          target="_blank"
+          rel="noreferrer"
+          className="result-card"
+        >
+          Google Maps Routes
+        </a>
 
-        <h2 className="transport-title">
-          Transport Options to {to}
-        </h2>
+        <a
+          href={`https://m.uber.com/looking?dropoff[formatted_address]=${to}`}
+          target="_blank"
+          rel="noreferrer"
+          className="result-card"
+        >
+          Uber
+        </a>
 
-        <div className="transport-links">
-
-          
-          <a
-            href={`https://www.google.com/maps/dir/?api=1&destination=${encodedDestination}`}
-            target="_blank"
-            rel="noreferrer"
-            className="transport-btn blue-btn"
-          >
-            View Routes on Google Maps
-          </a>
-
-          <a
-            href={`https://m.uber.com/ul/?action=setPickup&dropoff[formatted_address]=${encodedDestination}`}
-            target="_blank"
-            rel="noreferrer"
-            className="transport-btn black-btn"
-          >
-            Book an Uber
-          </a>
-
-          
-          <a
-            href="https://www.google.com/flights"
-            target="_blank"
-            rel="noreferrer"
-            className="transport-btn purple-btn"
-          >
-            Search Flights
-          </a>
-
-        </div>
-
+        <a
+          href="https://www.google.com/flights"
+          target="_blank"
+          rel="noreferrer"
+          className="result-card"
+        >
+          Flights
+        </a>
       </div>
-
-    </div>
+    </section>
   );
 }

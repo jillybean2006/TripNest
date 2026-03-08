@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../utils/api";
-
+import "./Register.css";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -13,10 +13,7 @@ export default function Register() {
   });
 
   function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
@@ -25,65 +22,52 @@ export default function Register() {
     try {
       const res = await registerUser(form);
 
-      if (res.message === "User registered successfully") {
-        alert("Registration successful");
-        navigate("/login");
+      if (res.token) {
+        localStorage.setItem("token", res.token);
+        navigate("/profile");
       } else {
         alert(res.message || "Registration failed");
       }
-    } catch (error) {
-      console.error("REGISTER FRONTEND ERROR:", error);
-      alert("Something went wrong during registration");
+    } catch (err) {
+      alert("Something went wrong while registering");
     }
   }
 
   return (
-    <div className="register-page">
+    <section className="register-page">
       <div className="register-card">
-        <h2>Create Account</h2>
+        <h1 className="register-title">Create Account</h1>
 
-        <form onSubmit={handleSubmit}>
-          <label>Name</label>
+        <form className="register-form" onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
+            placeholder="Name"
             value={form.name}
             onChange={handleChange}
-            placeholder="Enter your name"
-            required
           />
 
-          <label>Email</label>
           <input
             type="email"
             name="email"
+            placeholder="Email"
             value={form.email}
             onChange={handleChange}
-            placeholder="Enter your email"
-            required
           />
 
-          <label>Password</label>
           <input
             type="password"
             name="password"
+            placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            placeholder="Enter your password"
-            required
           />
 
-          <button type="submit">Register</button>
+          <button type="submit" className="retro-btn plum">
+            Register
+          </button>
         </form>
-
-        <p
-          className="login-link"
-          onClick={() => navigate("/login")}
-          style={{ cursor: "pointer" }}
-        >
-          Already have an account? Login
-        </p>
       </div>
-    </div>
+    </section>
   );
 }

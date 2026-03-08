@@ -1,5 +1,39 @@
-/* basic placeholder so build succeeds */
-.page {
-  min-height: 100vh;
-  padding: 24px;
+.register-page {
+  min-height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 500px;
+  background: rgb(20, 20, 30);
+  border: 2px solid plum;
+  border-radius: 24px;
+  padding: 2rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.register-title {
+  text-align: center;
+  color: gold;
+  font-size: 2rem;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.register-form input {
+  padding: 0.9rem 1rem;
+  border: 1px solid thistle;
+  border-radius: 14px;
+  background: black;
+  color: whitesmoke;
 }

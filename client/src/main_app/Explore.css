@@ -1,0 +1,17 @@
+.page-name-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.page-name-title {
+  text-align: center;
+  color: gold;
+}
+
+.page-name-card {
+  background: rgb(20, 20, 30);
+  border: 2px solid plum;
+  border-radius: 24px;
+  padding: 1.5rem;
+}
