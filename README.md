@@ -12,8 +12,8 @@ TripNest is a full-stack travel planning web application that allows users to ex
 
 ### Deployed App
 
-- ![backend deployed](https://tripnest-backend-pk6g.onrender.com)
-- ![frontend deployed](https://tripnest-frontend.onrender.com)
+- [backend deployed](https://tripnest-backend-pk6g.onrender.com)
+- [frontend deployed](https://tripnest-frontend.onrender.com)
 
 ### Planning Materials
 
