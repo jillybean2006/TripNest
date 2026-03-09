@@ -2,7 +2,7 @@
 
 ## Logo
 
-![TripNest Logo](logo.png)
+![TripNest Logo](https://raw.githubusercontent.com/jillybean2006/TripNest/main/logo.png)
 
 ## Description
 
