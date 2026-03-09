@@ -1,8 +1,8 @@
 # TripNest
 
-## Screenshot / Logo
+## Logo
 
-![logo](ChatGPT Image Mar 8, 2026, 09_55_01 PM.png)
+![TripNest Logo](logo.png)
 
 ## Description
 
