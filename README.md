@@ -2,8 +2,7 @@
 
 ## Screenshot / Logo
 
-![logo](<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/ab1c3b24-b860-4014-a8e1-631609612178" />
-)
+![logo](ChatGPT Image Mar 8, 2026, 09_55_01 PM.png)
 
 ## Description
 
