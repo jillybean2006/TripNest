@@ -7,7 +7,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -41,9 +41,9 @@ export default function Register() {
         <form className="register-form" onSubmit={handleSubmit}>
           <input
             type="text"
-            name="name"
-            placeholder="Name"
-            value={form.name}
+            name="username"
+            placeholder="Username"
+            value={form.username}
             onChange={handleChange}
           />
 
