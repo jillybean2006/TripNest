@@ -6,7 +6,7 @@
 
 ## Description
 
-TripNest is a full-stack travel planning web application that allows users to explore destinations and organize their trips in one place, The goal of TripNest is to simplify travel planning by bringing together helpful resources and trip organization tools into one easy-to-use platform.
+TripNest is a web application that allows users to explore destinations and organize their trips in one place, The goal of TripNest is to simplify travel planning by bringing together helpful resources and trip organization tools into one easy-to-use platform.
 
 ## Getting Started
 
