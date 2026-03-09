@@ -1,7 +1,6 @@
-const API_BASE = https://tripnest-backend-pk6g.onrender.com/;
+const API_BASE = "https://tripnest-backend-pk6g.onrender.com";
+
 console.log("API_BASE:", API_BASE);
-
-
 
 function getToken() {
   return localStorage.getItem("token");
@@ -32,8 +31,6 @@ async function handleResponse(res) {
     ...data,
   };
 }
-
-
 
 export async function registerUser(formData) {
   const res = await fetch(`${API_BASE}/api/auth/register`, {
@@ -80,8 +77,6 @@ export async function getUser() {
   return handleResponse(res);
 }
 
-
-
 export async function searchPlaces(query) {
   const res = await fetch(
     `${API_BASE}/api/places/search?query=${encodeURIComponent(query)}`
@@ -102,8 +97,6 @@ export async function searchPlaces(query) {
     places: data.places || [],
   };
 }
-
-
 
 export async function getTrips() {
   const token = getToken();
