@@ -1,4 +1,4 @@
-const API_BASE = https://tripnest-frontend.onrender.com/;
+const API_BASE = https://tripnest-backend-pk6g.onrender.com/;
 console.log("API_BASE:", API_BASE);
 
 
