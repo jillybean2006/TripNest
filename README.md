@@ -2,7 +2,7 @@
 
 ## Screenshot / Logo
 
-![TripNest Screenshot](images/tripnest-home.png)
+![logo](https://chatgpt.com/backend-api/estuary/content?id=file_000000009b4871f589b7d679ad1f2b74&cp=pri&ma=90000&ts=20521&p=igh&cid=1&sig=8d0fbe80104537b524e8b5907da5fc6a707854566b6fe7827a644c8155bfc789)
 
 ## Description
 
